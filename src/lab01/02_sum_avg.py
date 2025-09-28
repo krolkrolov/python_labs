@@ -9,4 +9,4 @@ b = ctf(b_input)
 total = a + b
 avg = total / 2
 
-print(f"sum={total:.3f}; avg={avg:.2f}")
+print(f"sum={total:.2f}; avg={avg:.2f}")

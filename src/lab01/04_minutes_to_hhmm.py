@@ -1,6 +1,6 @@
 m = int(input("Минуты: "))
 
-hours = m // 60  # целое деление для часов
-minutes = m % 60  # остаток от деления для минут
+hours = m // 60 
+minutes = m % 60 
 
 print(f"{hours}:{minutes:02d}")
