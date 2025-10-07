@@ -119,4 +119,133 @@ def flatten(mat: list[list | tuple]) -> list:
         result.extend(item)
     return result
 ```
-![6-th screen](images/lab01/06ex.png)
+![6-th screen](images/lab02/arrays_2.png)
+![6-th screen](images/lab02/arrays_1.png)
+---
+![6-th screen](images/lab02/arrays_3.png)
+![6-th screen](images/lab02/arrays_4.png)
+---
+![6-th screen](images/lab02/arrays_5.png)
+![6-th screen](images/lab02/arrays_6.png)
+
+---
+
+### Задание B
+```Python
+def transpose(mat: list[list[float | int ]]) -> list[list]:
+    if not mat:
+        return []
+    
+    row_length = len(mat[0])
+    for i, row in enumerate(mat):
+        if len(row) != row_length:
+            raise ValueError(f"Строка {i} имеет длину {len(row)}, ожидалось {row_length}")
+        
+    return [[row[j] for row in mat] for j in range(len(mat[0]))]
+
+
+def row_sums(mat: list[list[float | int]]) -> list[float]:
+    if not mat:
+        return []
+    
+    first_row_len = len(mat[0])
+    for row in mat:
+        if len(row) != first_row_len:
+            raise ValueError("Матрица должна быть прямоугольной")
+
+    sums = []
+    for row in mat:
+        sums.append(sum(row))
+    return sums
+
+
+def col_sums(mat: list[list[float | int]]) -> list[float]:
+    if not mat:
+        return []
+    
+    first_row_len = len(mat[0])
+    for row in mat:
+        if len(row) != first_row_len:
+            raise ValueError("Матрица должна быть прямоугольной")
+        
+    num_cols = len(mat[0])
+    sums = []
+        
+    for j in range(num_cols):
+        column_sum = 0
+        for row in mat:
+            column_sum += row[j]
+        sums.append(column_sum)
+        
+    return sums
+```
+![6-th screen](images/lab02/matrix_1.png)
+![6-th screen](images/lab02/matrix_2.png)
+---
+![6-th screen](images/lab02/matrix_3.png)
+![6-th screen](images/lab02/matrix_4.png)
+---
+![6-th screen](images/lab02/matrix_5.png)
+![6-th screen](images/lab02/matrix_6.png)
+---
+![6-th screen](images/lab02/matrix_7.png)
+![6-th screen](images/lab02/matrix_8.png)
+
+---
+
+### Задание C
+```Python
+def format_record(rec: tuple[str, str, float]) -> str:
+    # Проверка типов
+    if not isinstance(rec, tuple) or len(rec) != 3:
+        raise TypeError("Запись должна быть кортежем из 3 элементов")
+    
+    fio, group, gpa = rec
+    
+    if not isinstance(fio, str):
+        raise TypeError("ФИО должно быть строкой")
+    if not isinstance(group, str):
+        raise TypeError("Группа должна быть строкой")
+    if not isinstance(gpa, (int, float)):
+        raise TypeError("GPA должно быть числом")
+    
+    # Обработка и валидация ФИО
+    fio_clean = ' '.join(fio.split()).strip() 
+    if not fio_clean:
+        raise ValueError("ФИО не может быть пустым")
+    
+    # Обработка и валидация группы
+    group_clean = group.strip()
+    if not group_clean:
+        raise ValueError("Группа не может быть пустой")
+    
+    # Валидация GPA
+    if gpa < 0:
+        raise ValueError("GPA не может быть отрицательным")
+    
+    # Форматирование ФИО с инициалами
+    fio_parts = fio_clean.split()
+    surname = fio_parts[0].title()
+    
+    # Формируем инициалы из оставшихся частей (1-2 имени)
+    initials = []
+    for name_part in fio_parts[1:3]:
+        if name_part.strip():
+            initials.append(f"{name_part[0].upper()}.")
+    
+    # Если нет имен, добавляем пустой инициал
+    if not initials:
+        initials = [""]
+    
+    fio_formatted = f"{surname} {''.join(initials)}".strip()
+    
+    # Форматирование GPA с 2 знаками после запятой
+    gpa_formatted = f"{gpa:.2f}"
+    
+    return f"{fio_formatted}, гр. {group_clean}, GPA {gpa_formatted}"
+```
+![6-th screen](images/lab02/tuples_1.png)
+![6-th screen](images/lab02/tuples_2.png)
+---
+![6-th screen](images/lab02/tuples_3.png)
+![6-th screen](images/lab02/tuples_4.png)
