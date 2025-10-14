@@ -298,79 +298,45 @@ def top_n(freq: Dict[str, int], n: int = 5) -> List[Tuple[str, int]]:
 ![6-th screen](images/lab03/text05.png)
 ![6-th screen](images/lab03/text06.png)
 
+---
+
 ### Задание B
 ```Python
 import sys
-import re
-from collections import Counter
-from typing import Dict, List, Tuple
+import os
 
+# Добавляем путь к папке lib перед импортом
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 
-def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
-    if yo2e:
-        text = text.replace('Ё', 'Е').replace('ё', 'е')
-    
-    if casefold:
-        text = text.casefold()
-    
-    text = re.sub(r'[\t\r\n]', ' ', text)
-    
-    text = ''.join(char for char in text if char.isprintable() or char.isspace())
-    
-    text = re.sub(r'\s+', ' ', text).strip()
-    
-    return text
+from text import normalize, tokenize, count_freq, top_n
 
+def script():
+    text = input()
+    # Получаем список всех словс
+    text_corrected = tokenize(normalize(text))
+    # Считаем общее кол-во слов
+    count_words = len(text_corrected)
+    # Получаем словарь уникальных слов
+    dict_words = count_freq(text_corrected)
+    # Считаем кол-во уникальных слов
+    count_words_unique = len(dict_words)
+    # Сортируем словарь по кол-ву слов
+    dict_words_sort = top_n(dict_words)
 
-def tokenize(text: str) -> List[str]:
-    tokens = re.findall(r'\b[\w-]+\b', text)
-    return tokens
-
-
-def count_freq(tokens: List[str]) -> Dict[str, int]:
-    return dict(Counter(tokens))
-
-
-def top_n(freq: Dict[str, int], n: int = 5) -> List[Tuple[str, int]]:
-    sorted_items = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
-    return sorted_items[:n]
-
-
-
-
-# from text import normalize, tokenize, count_freq, top_n
-
-import io
-sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
-
-
-def main():
-    text = sys.stdin.read().strip()
-    
-    if not text:
-        print("Ошибка: ввод пустой")
-        return
-    
-    clean_text = normalize(text)
-    words = tokenize(clean_text)
-    
-    if not words:
-        print("Ошибка: нет слов для анализа")
-        return
-    
-    total = len(words)
-    unique = len(set(words))
-    freqs = count_freq(words)
-    top_words = top_n(freqs, 5)
-    
-    print(f"Всего слов: {total}")
-    print(f"Уникальных слов: {unique}")
-    print("Топ-5:")
-    for word, count in top_words:
-        print(f"{word}:{count}")
-
+    print(f'Всего слов: {count_words}')
+    print(f'Уникальных слов: {count_words_unique}')
+    print()
+    print('Топ 5:')
+    k = 0
+    print(f'{"слово":^15} | {"частота":^15}')
+    print(f'{"-"*15}-|-{"-"*15}')
+    for word, counts in dict_words_sort:
+        if k == 5:
+            break
+        k += 1
+        print(f'{word:^15} | {counts:^15}')
 
 if __name__ == "__main__":
-    main()
+    script()
 ```
 ![6-th screen](images/lab03/text07.png)
