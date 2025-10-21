@@ -340,3 +340,237 @@ if __name__ == "__main__":
     script()
 ```
 ![6-th screen](images/lab03/text07.png)
+
+---
+
+## Лабораторная работа 4
+### Описание
+
+Реализован модуль для анализа текстовых файлов и генерации отчетов о частоте слов в формате CSV.
+
+---
+
+### Задание A — модуль src/lab04/io_txt_csv.py
+Код:
+```Python
+import csv
+from pathlib import Path
+from typing import Iterable, Sequence
+
+
+def read_text(path: str | Path, encoding: str = "utf-8") -> str:
+    p = Path(path)
+    return p.read_text(encoding=encoding)
+
+
+def write_csv(rows: Iterable[Sequence], path: str | Path, 
+              header: tuple[str, ...] | None = None) -> None:
+    p = Path(path)
+    rows = list(rows)
+    
+    if rows:
+        first_length = len(rows[0])
+        for i, row in enumerate(rows):
+            if len(row) != first_length:
+                raise ValueError(f"Строка {i} имеет длину {len(row)}, ожидается {first_length}")
+    
+    ensure_parent_dir(p)
+    
+    with p.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if header is not None:
+            writer.writerow(header)
+        writer.writerows(rows)
+
+
+def ensure_parent_dir(path: str | Path) -> None:
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+```
+#### Тесты:
+1) Тест для read_text():
+
+Код проверки:
+
+![6-th screen](images/lab04/lab04(7).png)
+
+input.txt:
+
+![6-th screen](images/lab04/lab04(1).png)
+
+Консоль:
+
+![6-th screen](images/lab04/lab04(8).png)
+---
+2)  Тест для write_csv():
+
+Код проверки:
+
+![6-th screen](images/lab04/lab04(9).png)
+
+test1.csv:
+
+![6-th screen](images/lab04/lab04(10).png)
+
+Консоль:
+
+![6-th screen](images/lab04/lab04(11).png)
+---
+3)  Тест для ensure_parent_dir():
+
+Код проверки:
+
+![6-th screen](images/lab04/lab04(12).png)
+
+Созданные дирректории:
+
+![6-th screen](images/lab04/lab04(14).png)
+
+Консоль:
+
+![6-th screen](images/lab04/lab04(13).png)
+---
+
+### Задание B — скрипт src/lab04/text_report.py
+Код:
+```Python
+import sys
+from pathlib import Path
+import os
+from collections import Counter
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
+
+from text import normalize, tokenize
+
+from io_txt_csv import read_text, write_csv
+
+
+def frequencies_from_text(text: str) -> dict[str, int]:
+    normalized_text = normalize(text)
+    tokens = tokenize(normalized_text)
+    return Counter(tokens)
+
+
+def sorted_word_counts(freq: dict[str, int]) -> list[tuple[str, int]]:
+    return sorted(freq.items(), key=lambda kv: (-kv[1], kv[0]))
+
+
+def print_summary(freq: dict[str, int], top_n: int = 5) -> None:
+    total_words = sum(freq.values())
+    unique_words = len(freq)
+    
+    print(f"Всего слов: {total_words}")
+    print(f"Уникальных слов: {unique_words}")
+    
+    if unique_words > 0:
+        sorted_words = sorted_word_counts(freq)
+        top_words = sorted_words[:top_n]
+        print(f"Топ-{top_n}: {', '.join(f'{word}({count})' for word, count in top_words)}")
+
+
+def main():
+    try:
+        # Чтение входного файла
+        input_file = Path("data/lab04/input.txt")
+        text = read_text(input_file)
+        
+        # Вычисление частот
+        freq = frequencies_from_text(text)
+        
+        # Подготовка данных для CSV
+        sorted_counts = sorted_word_counts(freq)
+        csv_data = [(word, count) for word, count in sorted_counts]
+        
+        # Запись отчета
+        output_file = Path("data/lab04/report.csv")
+        write_csv(csv_data, output_file, header=("word", "count"))
+        
+        # Вывод статистики
+        print_summary(freq)
+        print(f"\nОтчет сохранен в: {output_file}")
+        
+    except FileNotFoundError:
+        print(f"Ошибка: Файл {input_file} не найден")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
+```
+#### Обработка входного файла
+
+Скрипт поддерживает два способа указания входного файла:
+
+##### 1. Хардкодированный путь (по умолчанию)
+Если запустить скрипт без параметров, он автоматически использует файл:
+`data/lab04/input.txt`
+
+
+**Пример:**
+```bash
+python src/lab04/text_report.py
+```
+
+#### 2. Через параметры командной строки
+Можно указать произвольный входной файл с помощью параметра `--in`:
+
+Пример:
+```bash
+python src/lab04/text_report.py --in data/my_text.txt
+python src/lab04/text_report.py --in /full/path/to/file.txt
+```
+##### Приоритет использования:
+
+1) Если указан параметр `--in` - используется указанный файл
+
+2) Если параметр не указан - используется хардкодированный путь data/lab04/input.txt
+
+##### Обработка ошибок:
+
+1) Если файл не существует - выводится ошибка и скрипт завершается
+
+2) Рекомендуется использовать относительные пути от корня проекта
+
+#### Использование входного файла
+
+**По умолчанию:** скрипт читает файл `data/lab04/input.txt`
+
+**С указанием файла:** использовать параметр `--in`
+```bash
+python src/lab04/text_report.py --in data/my_file.txt
+```
+---
+
+### Тест-кейсы text_report
+
+#### A. Один файл (база):
+
+1) Вход (data/input.txt):
+
+![6-th screen](images/lab04/lab04(1).png)
+
+2) Полученный report.csv:
+
+![6-th screen](images/lab04/lab04(3).png)
+
+3) Консоль:
+
+![6-th screen](images/lab04/lab04(2).png)
+
+#### B. Пустой файл:
+
+1) Вход:
+
+![6-th screen](images/lab04/lab04(4).png)
+
+2) Полученный report.csv:
+
+![6-th screen](images/lab04/lab04(6).png)
+
+3) Консоль:
+
+![6-th screen](images/lab04/lab04(5).png)

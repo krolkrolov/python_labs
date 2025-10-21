@@ -1,7 +1,6 @@
 import sys
 import os
 
-# Добавляем путь к папке lib перед импортом
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 
 from text import normalize, tokenize, count_freq, top_n
