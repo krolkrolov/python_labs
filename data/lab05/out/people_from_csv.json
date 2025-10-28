@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Алиса",
+    "age": "22",
+    "city": "Москва",
+    "department": "IT"
+  },
+  {
+    "name": "Борис",
+    "age": "35",
+    "city": "Санкт-Петербург",
+    "department": "HR"
+  },
+  {
+    "name": "Виктор",
+    "age": "",
+    "city": "Казань",
+    "department": "Marketing"
+  }
+]
