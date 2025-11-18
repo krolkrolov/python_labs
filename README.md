@@ -809,3 +809,241 @@ csv_to_xlsx('data/samples/cities.csv', 'data/out/cities.xlsx')
 и сообщает об ошибках при их возникновении.
 ```
 ![6-th screen](images/lab05/lab05(1).png)
+---
+## Лабораторная работа 4
+
+**CLI-УТИЛИТЫ С ARGPARSE**
+
+### ЦЕЛЬ РАБОТЫ
+Научиться создавать консольные инструменты с аргументами командной строки, подкомандами и флагами.
+### ВЫПОЛНЕННЫЕ ЗАДАЧИ
+### 1. МОДУЛЬ CLI_TEXT.PY
+Создан модуль с двумя подкомандами:
+
+**Команда STATS**
+
+- Назначение: анализ частот слов в тексте
+
+- Использует функции из lab03: normalize, tokenize, count_freq, top_n
+
+- Параметры:
+  - --input (обязательный) - путь к текстовому файлу
+  - --top (опциональный) - количество топ-слов (по умолчанию 5)
+
+СКРИНШОТ 2: Демонстрация работы команды stats
+
+![6-th screen](images/lab06/lab06_2.png)
+
+```bash
+python -m src.lab06.cli_text stats --input data/lab05/samples/people.txt --top 5
+```
+
+**Команда CAT**
+
+- Назначение: вывод содержимого файла построчно
+
+- Параметры:
+  - --input (обязательный) - путь к файлу
+  - -n (опциональный) - нумерация строк
+
+СКРИНШОТ 3: Демонстрация работы команды cat
+
+![6-th screen](images/lab06/lab06_3.png)
+
+```bash
+python -m src.lab06.cli_text cat --input data/lab05/samples/people.csv -n
+```
+
+### 2. МОДУЛЬ CLI_CONVERT.PY
+
+Создан модуль с тремя подкомандами конвертации:
+
+**Команда JSON2CSV**
+
+- Назначение: конвертация JSON в CSV
+
+- Использует функцию json_to_csv из lib
+
+- Параметры:
+  - --in (обязательный) - входной JSON файл
+  - --out (обязательный) - выходной CSV файл
+
+СКРИНШОТ 4: Демонстрация работы команды json2csv
+
+![6-th screen](images/lab06/lab06_4.png)
+
+```bash
+python -m src.lab06.cli_convert json2csv --in data/lab05/samples/people.json --out data/lab06/out/people.csv
+```
+
+**Команда CSV2JSON**
+
+- Назначение: конвертация CSV в JSON
+
+- Использует функцию csv_to_json из lib
+
+- Параметры:
+  - --in (обязательный) - входной CSV файл
+  - --out (обязательный) - выходной JSON файл
+
+СКРИНШОТ 5: Демонстрация работы команды csv2json
+
+![6-th screen](images/lab06/lab06_5.png)
+
+```bash
+python -m src.lab06.cli_convert csv2json --in data/lab05/samples/people.csv --out data/lab06/out/people.json
+```
+
+**Команда CSV2XLSX**
+
+- Назначение: конвертация CSV в XLSX
+
+- Использует функцию csv_to_xlsx из lib
+
+- Параметры:
+  - --in (обязательный) - входной CSV файл
+  - --out (обязательный) - выходной XLSX файл
+
+СКРИНШОТ 6: Демонстрация работы команды csv2xlsx
+
+![6-th screen](images/lab06/lab06_6.png)
+
+```bash
+python -m src.lab06.cli_convert csv2xlsx --in data/lab05/samples/people.csv --out data/lab06/out/people.xlsx
+```
+---
+### ПРОВЕРКА РАБОТОСПОСОБНОСТИ
+
+---
+
+### ПОДГОТОВКА ДАННЫХ
+
+СКРИНШОТ 1: Структура исходных данных
+
+![6-th screen](images/lab06/lab06_1.png)
+
+```bash
+Get-ChildItem data/lab05/samples/
+```
+
+
+Использованы файлы из **lab05:**
+
+- people.csv - данные о людях в CSV формате
+
+- people.json - данные о людях в JSON формате
+
+- cities.csv - данные о городах
+
+- people.txt - текстовые данные для анализа (создан для демонстрации)
+
+### ПРОВЕРКА СПРАВКИ
+
+СКРИНШОТ 7: Справка по cli_text
+
+![6-th screen](images/lab06/lab06_7.png)
+
+```bash
+python -m src.lab06.cli_text --help
+```
+---
+СКРИНШОТ 8: Справка по командам cli_text
+
+![6-th screen](images/lab06/lab06_8.png)
+
+```bash
+python -m src.lab06.cli_text cat --help
+python -m src.lab06.cli_text stats --help
+```
+---
+СКРИНШОТ 9: Справка по cli_convert
+
+![6-th screen](images/lab06/lab06_9.png)
+
+```bash
+python -m src.lab06.cli_convert --help
+```
+---
+СКРИНШОТ 10: Справка по командам конвертации
+
+![6-th screen](images/lab06/lab06_10.png)
+
+```bash
+python -m src.lab06.cli_convert json2csv --help
+python -m src.lab06.cli_convert csv2json --help
+python -m src.lab06.cli_convert csv2xlsx --help
+```
+
+---
+
+### ПРОВЕРКА РЕЗУЛЬТАТОВ
+
+СКРИНШОТ 11: Созданные файлы в директории out
+
+![6-th screen](images/lab06/lab06_11.png)
+
+```bash
+Get-ChildItem data/lab06/out/
+```
+
+Результаты конвертации:
+
+- people.csv (158 байт) - конвертирован из JSON
+
+- people.json (354 байт) - конвертирован из CSV
+
+- people.xlsx (5074 байт) - конвертирован из CSV
+
+---
+
+### ПРОВЕРКА ОБРАБОТКИ ОШИБОК
+
+СКРИНШОТ 12: Обработка несуществующего файла
+
+![6-th screen](images/lab06/lab06_12.png)
+
+```bash
+python -m src.lab06.cli_text cat --input data/lab05/samples/nonexistent.txt
+```
+
+---
+
+### ВЫВОДЫ
+
+1. Все требования технического задания выполнены
+
+2. Созданы два CLI-модуля с подкомандами:
+
+    - cli_text.py: cat, stats
+
+    - cli_convert.py: json2csv, csv2json, csv2xlsx
+
+3. Использованы функции из предыдущих лабораторных работ:
+
+    - Из lab03: функции анализа текста
+
+    - Из lab05: функции конвертации данных
+
+    - Из lib: вспомогательные функции ввода-вывода
+
+4. Реализована корректная обработка аргументов через argparse
+
+5. Обеспечена обработка ошибок с понятными сообщениями
+
+6. Все сценарии проверки из методички успешно пройдены
+
+---
+
+### ТЕХНИЧЕСКИЕ ДЕТАЛИ
+
+- Использована только стандартная библиотека Python
+
+- Применен модуль argparse для парсинга аргументов
+
+- Реализована система подкоманд
+
+- Обеспечена кроссплатформенная работа
+
+- Вывод справки (--help) работает для всех подкоманд
+
+Работа демонстрирует полноценные CLI-утилиты, готовые к использованию в производственной среде.
