@@ -3,33 +3,52 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "lib"))
 
-# Импортируем ваши функции из lib
 from io_helpers import json_to_csv, csv_to_json, csv_to_xlsx, ensure_parent_dir
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Конвертеры данных между форматами",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    subparsers = parser.add_subparsers(dest="command", help="Доступные команды конвертации")
+    subparsers = parser.add_subparsers(
+        dest="command", help="Доступные команды конвертации"
+    )
 
     # Подкоманда json2csv
-    json2csv_parser = subparsers.add_parser("json2csv", help="Конвертировать JSON в CSV")
-    json2csv_parser.add_argument("--in", dest="input", required=True, help="Входной JSON файл")
-    json2csv_parser.add_argument("--out", dest="output", required=True, help="Выходной CSV файл")
+    json2csv_parser = subparsers.add_parser(
+        "json2csv", help="Конвертировать JSON в CSV"
+    )
+    json2csv_parser.add_argument(
+        "--in", dest="input", required=True, help="Входной JSON файл"
+    )
+    json2csv_parser.add_argument(
+        "--out", dest="output", required=True, help="Выходной CSV файл"
+    )
 
     # Подкоманда csv2json
-    csv2json_parser = subparsers.add_parser("csv2json", help="Конвертировать CSV в JSON")
-    csv2json_parser.add_argument("--in", dest="input", required=True, help="Входной CSV файл")
-    csv2json_parser.add_argument("--out", dest="output", required=True, help="Выходной JSON файл")
+    csv2json_parser = subparsers.add_parser(
+        "csv2json", help="Конвертировать CSV в JSON"
+    )
+    csv2json_parser.add_argument(
+        "--in", dest="input", required=True, help="Входной CSV файл"
+    )
+    csv2json_parser.add_argument(
+        "--out", dest="output", required=True, help="Выходной JSON файл"
+    )
 
     # Подкоманда csv2xlsx
-    csv2xlsx_parser = subparsers.add_parser("csv2xlsx", help="Конвертировать CSV в XLSX")
-    csv2xlsx_parser.add_argument("--in", dest="input", required=True, help="Входной CSV файл")
-    csv2xlsx_parser.add_argument("--out", dest="output", required=True, help="Выходной XLSX файл")
+    csv2xlsx_parser = subparsers.add_parser(
+        "csv2xlsx", help="Конвертировать CSV в XLSX"
+    )
+    csv2xlsx_parser.add_argument(
+        "--in", dest="input", required=True, help="Входной CSV файл"
+    )
+    csv2xlsx_parser.add_argument(
+        "--out", dest="output", required=True, help="Выходной XLSX файл"
+    )
 
     args = parser.parse_args()
 

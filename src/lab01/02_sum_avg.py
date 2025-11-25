@@ -1,5 +1,6 @@
 def ctf(value):
-    return float(value.replace(',', '.'))
+    return float(value.replace(",", "."))
+
 
 a_input = input("a: ").strip()
 b_input = input("b: ").strip()

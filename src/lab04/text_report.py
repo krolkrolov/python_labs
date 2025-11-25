@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 from collections import Counter
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "lib"))
 
 from text import normalize, tokenize
 
@@ -23,14 +23,16 @@ def sorted_word_counts(freq: dict[str, int]) -> list[tuple[str, int]]:
 def print_summary(freq: dict[str, int], top_n: int = 5) -> None:
     total_words = sum(freq.values())
     unique_words = len(freq)
-    
+
     print(f"Всего слов: {total_words}")
     print(f"Уникальных слов: {unique_words}")
-    
+
     if unique_words > 0:
         sorted_words = sorted_word_counts(freq)
         top_words = sorted_words[:top_n]
-        print(f"Топ-{top_n}: {', '.join(f'{word}({count})' for word, count in top_words)}")
+        print(
+            f"Топ-{top_n}: {', '.join(f'{word}({count})' for word, count in top_words)}"
+        )
 
 
 def main():
@@ -38,22 +40,22 @@ def main():
         # Чтение входного файла
         input_file = Path("data/lab04/input.txt")
         text = read_text(input_file)
-        
+
         # Вычисление частот
         freq = frequencies_from_text(text)
-        
+
         # Подготовка данных для CSV
         sorted_counts = sorted_word_counts(freq)
         csv_data = [(word, count) for word, count in sorted_counts]
-        
+
         # Запись отчета
         output_file = Path("data/lab04/report.csv")
         write_csv(csv_data, output_file, header=("word", "count"))
-        
+
         # Вывод статистики
         print_summary(freq)
         print(f"\nОтчет сохранен в: {output_file}")
-        
+
     except FileNotFoundError:
         print(f"Ошибка: Файл {input_file} не найден")
         sys.exit(1)
