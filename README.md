@@ -1169,49 +1169,26 @@ black --check .
 ### ПРИМЕРЫ JSON ДО/ПОСЛЕ ПРЕОБРАЗОВАНИЯ
 
 **Исходный JSON (students_input.json):**
-```json
-[
-  {
-    "fio": "Иванов Иван Иванович",
-    "birthdate": "2003-05-15",
-    "group": "BIVT-01",
-    "gpa": 4.8
-  },
-  {
-    "fio": "Петрова Анна Сергеевна",
-    "birthdate": "2002-11-30",
-    "group": "BIVT-21",
-    "gpa": 3.5
-  }
-]
-```
+
+![6-th screen](images/lab08/lab08_2.png)
 
 **После десериализации (объекты Python):**
-```
-Студент: Иванов Иван Иванович, Группа: BIVT-01, GPA: 4.80, Возраст: 22 лет
-Студент: Петрова Анна Сергеевна, Группа: BIVT-21, GPA: 3.50, Возраст: 23 лет
-```
+
+![6-th screen](images/lab08/lab08_3.png)
+
+**Исходный (объекты Python):**
+
+![6-th screen](images/lab08/lab08_4.png)
 
 **После сериализации (students_output.json):**
-```json
-[
-  {
-    "fio": "Иванов Иван Иванович",
-    "birthdate": "2003-05-15",
-    "group": "BIVT-01",
-    "gpa": 4.8
-  },
-  {
-    "fio": "Петрова Анна Сергеевна",
-    "birthdate": "2002-11-30",
-    "group": "BIVT-21",
-    "gpa": 3.5
-  }
-]
-```
+
+![6-th screen](images/lab08/lab08_5.png)
 
 **ЦИКЛ ПРЕОБРАЗОВАНИЙ:**
-Python объект → to_dict() → JSON файл → from_dict() → Python объект
+
+JSON файл → from_dict() → Python объект
+
+Python объект → to_dict() → JSON файл
 
 ---
 
