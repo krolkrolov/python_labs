@@ -1445,3 +1445,230 @@ python test_lab09.py
 Лабораторная работа успешно выполнена. Реализована система управления данными студентов с использованием CSV-файлов как простой базы данных. Все CRUD-операции работают корректно, данные валидируются через класс Student из ЛР8. Дополнительное задание со статистикой также реализовано.
 
 **Подготовлено для следующей лабораторной работы:** ЛР10 (CLI-утилита) будет использовать созданный класс Group для реализации командного интерфейса.
+
+---
+
+# Лабораторная работа 10: Структуры данных
+
+**Цель работы:** Реализовать базовые структуры данных (стек, очередь, связный список), сравнить их производительность и научиться думать в терминах асимптотики (O(1), O(n)).
+
+## Теоретическая часть
+
+### Стек (Stack)
+**Определение:** Структура данных LIFO (Last In, First Out) - "последним пришел, первым ушел". Элементы добавляются и удаляются с одного конца (вершины).
+
+**Основные операции:**
+- `push(item)` - добавить элемент на вершину стека
+- `pop()` - удалить и вернуть верхний элемент
+- `peek()` - посмотреть верхний элемент без удаления
+- `is_empty()` - проверить, пуст ли стек
+
+**Сложность операций:** Все операции O(1)
+
+### Очередь (Queue)
+**Определение:** Структура данных FIFO (First In, First Out) - "первым пришел, первым ушел". Элементы добавляются в конец, а удаляются из начала.
+
+**Основные операции:**
+- `enqueue(item)` - добавить элемент в конец очереди
+- `dequeue()` - удалить и вернуть первый элемент
+- `peek()` - посмотреть первый элемент без удаления
+- `is_empty()` - проверить, пуста ли очередь
+
+**Сложность операций:** Все операции O(1)
+
+### Односвязный список (Singly Linked List)
+**Определение:** Динамическая структура данных, состоящая из узлов (Node), где каждый узел содержит значение и ссылку на следующий узел.
+
+**Основные операции:**
+- `append(value)` - добавить элемент в конец списка (O(1) с tail)
+- `prepend(value)` - добавить элемент в начало списка (O(1))
+- `insert(idx, value)` - вставить элемент по индексу (O(n))
+- `remove(value)` - удалить первое вхождение значения (O(n))
+- Итерация по элементам (O(n))
+
+## Реализация
+
+### Класс Stack (`src/lab10/structures.py`)
+```python
+class Stack:
+    """Стек (LIFO) на базе list"""
+    def __init__(self):
+        self._data = []
+    
+    def push(self, item):        # O(1)
+    def pop(self):               # O(1)
+    def peek(self):              # O(1)
+    def is_empty(self):          # O(1)
+    def __len__(self):           # O(1)
+```
+
+### Класс Queue (`src/lab10/structures.py`)
+```python
+class Queue:
+    """Очередь (FIFO) на базе deque"""
+    def __init__(self):
+        self._data = deque()
+    
+    def enqueue(self, item):     # O(1)
+    def dequeue(self):           # O(1)
+    def peek(self):              # O(1)
+    def is_empty(self):          # O(1)
+    def __len__(self):           # O(1)
+```
+
+### Класс SinglyLinkedList (`src/lab10/linked_list.py`)
+```python
+class Node:
+    """Узел односвязного списка"""
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
+
+class SinglyLinkedList:
+    """Односвязный список"""
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self._size = 0
+    
+    def append(self, value):     # O(1) с tail
+    def prepend(self, value):    # O(1)
+    def insert(self, idx, value): # O(n)
+    def remove(self, value):     # O(n)
+    def visual_repr(self):       # Красивое представление
+```
+
+## Результаты тестирования
+
+### Функциональные тесты
+Все структуры данных прошли функциональное тестирование:
+
+**Stack**: 
+- Корректное LIFO поведение
+- Исключение при пустом стеке: `Cannot pop from empty stack`
+- Все операции O(1)
+
+**Queue**:
+- Корректное FIFO поведение  
+- Исключение при пустой очереди: `Cannot dequeue from empty queue`
+- Все операции O(1)
+
+**SinglyLinkedList**:
+- Корректная работа всех методов
+- Визуальное представление связей (например: `[5] -> [10] -> [20] -> None`)
+- Итерация по элементам
+- Обработка некорректных индексов
+
+### Результаты бенчмарков
+```
+Stack (1000 push+pop): 0.000251 сек
+Queue (1000 enqueue+dequeue): 0.000167 сек
+LinkedList (1000 append): 0.000231 сек
+```
+
+### Анализ производительности
+1. **Queue показала лучшую производительность** (0.000167 сек) благодаря использованию оптимизированного `collections.deque`
+2. **Stack также быстр** (0.000251 сек) благодаря оптимизациям Python `list` для операций с концом
+3. **LinkedList с tail** показывает почти такую же скорость append (0.000231 сек) как Stack
+
+### Сравнение сложности операций
+| Структура | Операция | Сложность | Примечания |
+|-----------|----------|-----------|------------|
+| Stack | push/pop | O(1) | Амортизированная сложность |
+| Queue | enqueue/dequeue | O(1) | Использует deque |
+| LinkedList | append (с tail) | O(1) | С использованием tail |
+| LinkedList | prepend | O(1) | Вставка в начало |
+| LinkedList | insert | O(n) | В худшем случае |
+| LinkedList | remove | O(n) | Поиск элемента |
+
+## Примеры использования
+
+### Stack
+```python
+from src.lab10.structures import Stack
+
+s = Stack()
+s.push(1)
+s.push(2)
+s.push(3)
+print(s.pop())  # 3
+print(s.peek())  # 2
+print(len(s))  # 2
+```
+
+### Queue
+```python
+from src.lab10.structures import Queue
+
+q = Queue()
+q.enqueue('A')
+q.enqueue('B')
+q.enqueue('C')
+print(q.dequeue())  # 'A'
+print(q.peek())  # 'B'
+print(len(q))  # 2
+```
+
+### SinglyLinkedList
+```python
+from src.lab10.linked_list import SinglyLinkedList
+
+lst = SinglyLinkedList()
+lst.append(10)
+lst.append(20)
+lst.prepend(5)
+print(lst)  # SinglyLinkedList([5, 10, 20])
+print(lst.visual_repr())  # [5] -> [10] -> [20] -> None
+print(len(lst))  # 3
+```
+
+## Скриншоты
+
+![alt text](images/lab10/lab10_1.png)
+
+## Выводы
+
+1. **Все структуры реализованы корректно** и соответствуют теоретическим принципам:
+   - Stack работает по принципу LIFO
+   - Queue работает по принципу FIFO
+   - SinglyLinkedList поддерживает динамическое изменение размера
+
+2. **Сложность операций соответствует теории**:
+   - Stack и Queue обеспечивают O(1) для основных операций
+   - LinkedList обеспечивает O(1) для добавления в начало/конец
+   - LinkedList обеспечивает O(n) для вставки/удаления по индексу
+
+3. **Производительность**:
+   - Queue на deque показывает наилучшую производительность
+   - Stack на list также очень эффективен
+   - LinkedList с tail оптимизацией конкурентоспособен для append
+
+4. **Практическая применимость**:
+   - **Stack** идеален для алгоритмов с LIFO логикой (отмена операций, обход в глубину)
+   - **Queue** необходим для FIFO сценариев (обработка задач, breadth-first search)
+   - **LinkedList** полезен при частых вставках/удалениях в начале списка
+
+## Запуск тестов
+
+```bash
+# Быстрый тест всех структур
+python -m src.lab10.quick_test
+
+# Полное тестирование с бенчмарками
+python -m src.lab10.simple_test
+
+# Функциональные тесты
+python -c "from src.lab10.structures import Stack; s = Stack(); s.push(1); print(s.pop())"
+```
+
+## Структура репозитория
+```
+python_labs/
+├── src/lab10/
+│   ├── structures.py      # Stack и Queue
+│   ├── linked_list.py     # SinglyLinkedList
+│   ├── simple_test.py     # Тесты и бенчмарки
+│   └── quick_test.py      # Быстрые тесты
+├── images/lab10/          # Скриншоты тестов
+└── README.md             # Этот файл
+```
